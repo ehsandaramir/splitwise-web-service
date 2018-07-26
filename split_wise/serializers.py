@@ -1,26 +1,27 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+from split_wise import views
 from split_wise.models import Profile, Bill, Payment, Debt
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    # user = serializers.StringRelatedField(many=False)
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
 
     class Meta:
         model = Profile
-        fields = ['user', 'first_name', 'last_name', ]
+        fields = ['url', 'user', 'first_name', 'last_name', ]
         read_only_fields = ['user', ]
         depth = 1
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = ProfileSerializer()
 
     class Meta:
         model = User
-        fields = ['pk', 'username', 'email', 'password', 'profile', ]
-        read_only_fields = ['pk', ]
+        fields = ['url', 'pk', 'username', 'email', 'password', 'profile', 'bills', ]
+        read_only_fields = ['pk', 'bills', ]
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -37,42 +38,48 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        instance.username = validated_data['username']
-        instance.email = validated_data['email']
-        instance.set_password(validated_data['password'])
+        if 'username' in validated_data:
+            instance.username = validated_data['username']
+        if 'email' in validated_data:
+            instance.email = validated_data['email']
+        if 'password' in validated_data:
+            instance.set_password(validated_data['password'])
         instance.save()
 
-        profile_ser = ProfileSerializer(instance.profile, data=validated_data['profile'])
-        if profile_ser.is_valid(True):
-            profile_ser.update(instance.profile, validated_data['profile'])
+        if 'profile' in validated_data:
+            profile_ser = ProfileSerializer(instance.profile, data=validated_data['profile'])
+            if profile_ser.is_valid(True):
+                profile_ser.update(instance.profile, validated_data['profile'])
 
         return instance
 
 
-class PaymentSerializer(serializers.ModelSerializer):
+class PaymentSerializer(serializers.HyperlinkedModelSerializer):
+    paid_by = UserSerializer()
 
     class Meta:
         model = Payment
-        fields = ['pk', 'bill', 'paid_by', 'amount']
+        fields = ['url', 'pk', 'bill', 'paid_by', 'amount']
         read_only_fields = ['pk', ]
 
 
-class DebtSerializer(serializers.ModelSerializer):
+class DebtSerializer(serializers.HyperlinkedModelSerializer):
+    owed_by = UserSerializer()
 
     class Meta:
         model = Debt
-        fields = ['pk', 'bill', 'owed_by', 'amount']
+        fields = ['url', 'pk', 'bill', 'owed_by', 'amount']
         read_only_fields = ['pk', ]
 
 
-class BillSerializer(serializers.ModelSerializer):
+class BillSerializer(serializers.HyperlinkedModelSerializer):
     creator = UserSerializer()
     payments = PaymentSerializer(many=True)
     debts = DebtSerializer(many=True)
 
     class Meta:
         model = Bill
-        fields = ['pk', 'creator', 'title', 'desc', 'create_date', 'amount', 'payments', 'debts', ]
+        fields = ['url', 'pk', 'creator', 'title', 'desc', 'create_date', 'amount', 'payments', 'debts', ]
         read_only_fields = ['pk', 'create_date', 'payments', 'debts']
         depth = 1
 

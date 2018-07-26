@@ -1,11 +1,11 @@
 from itertools import chain
 
 from django.contrib.auth.models import User
-from django.shortcuts import render
-from rest_framework import mixins, viewsets, status
+from django.http import Http404
+from rest_framework import mixins, viewsets, permissions
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from rest_framework.response import Response
 
 from split_wise import serializers
 from split_wise.models import Profile, Bill, Payment, Debt
@@ -26,6 +26,7 @@ class ProfileViewSet(mixins.ListModelMixin,
         note: represented by url
 
     """
+    # lookup_field = 'user'
     queryset = Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -67,6 +68,15 @@ class UserViewSet(
         else:
             return User.objects.all()
 
+    def get_object(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return User.objects.get(pk=self.kwargs.get('pk'))
+        else:
+            if int(self.kwargs.get('pk')) == self.request.user.id:
+                return self.request.user
+            else:
+                raise PermissionDenied('could not change user that is not you!')
+
 
 class BillViewSet(
     viewsets.GenericViewSet,
@@ -98,6 +108,12 @@ class BillViewSet(
         final_result = sorted(final_result, key=lambda instance: instance.create_date)
         return final_result
 
+    def get_object(self):
+        for val in self.get_queryset():
+            if val.id == int(self.kwargs.get('pk')):
+                return val
+        raise Http404()
+
     def create(self, request, *args, **kwargs):
         request.data['creator'] = request.user.id
         return super().create(request, *args, **kwargs)
@@ -124,6 +140,12 @@ class PaymentViewSet(
         result = sorted(result, key=lambda instance: instance.bill.create_date)
         return result
 
+    def get_object(self):
+        for val in self.get_queryset():
+            if val.id == int(self.kwargs.get('pk')):
+                return val
+        raise Http404()
+
 
 class DebtViewSet(
     viewsets.GenericViewSet,
@@ -146,3 +168,8 @@ class DebtViewSet(
         result = sorted(result, key=lambda instance: instance.bill.create_date)
         return result
 
+    def get_object(self):
+        for val in self.get_queryset():
+            if val.id == int(self.kwargs.get('pk')):
+                return val
+        raise Http404()
