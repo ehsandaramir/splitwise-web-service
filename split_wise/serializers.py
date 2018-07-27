@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from split_wise import views
 from split_wise.models import Profile, Bill, Payment, Debt
 
 
@@ -79,7 +78,7 @@ class BillSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Bill
-        fields = ['url', 'pk', 'creator', 'title', 'desc', 'create_date', 'amount', 'payments', 'debts', ]
-        read_only_fields = ['pk', 'create_date', 'payments', 'debts']
+        fields = ['url', 'pk', 'creator', 'title', 'desc', 'create_date', 'amount', 'balance', 'payments', 'debts', ]
+        read_only_fields = ['pk', 'create_date', 'payments', 'debts', 'balance']
         depth = 1
 

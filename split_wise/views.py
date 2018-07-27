@@ -16,17 +16,7 @@ class ProfileViewSet(mixins.ListModelMixin,
                      viewsets.GenericViewSet):
     """
     retrieve profile model objects
-
-    list:
-        list of all created profiles
-        note: paginated!
-
-    retrieve:
-        get an specified profile
-        note: represented by url
-
     """
-    # lookup_field = 'user'
     queryset = Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -42,9 +32,8 @@ class UserViewSet(
     mixins.DestroyModelMixin
 ):
     """
-    view set for list / detail / update / delete  django default user model
+    view set for CRUD django default user model
     note1: there is a Profile model that is one-to-one with user model
-    note2: for create user post on '/api/self/user/' url
     """
     serializer_class = serializers.UserSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -78,6 +67,43 @@ class UserViewSet(
                 raise PermissionDenied('could not change user that is not you!')
 
 
+class BalanceViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin
+):
+    serializer_class = serializers.BillSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+
+    def base_queryset(self):
+        current_user = self.request.user
+        query_set_create = Bill.objects.filter(creator=current_user)
+        query_set_paid_by = Bill.objects.filter(payments__paid_by=current_user)
+        query_set_owed_by = Bill.objects.filter(debts__owed_by=current_user)
+
+        query_set = list(chain(query_set_create, query_set_paid_by, query_set_owed_by))
+
+        # username_set = set()
+        # final_result = list()
+        # for i in query_set:
+        #     if i.id not in username_set:
+        #         username_set.add(i.id)
+        #         final_result.append(i)
+
+        final_result = sorted(query_set, key=lambda instance: instance.create_date)
+        return final_result
+
+    def get_queryset(self):
+        return [b for b in self.base_queryset() if b.balance >= 0.01 or b.balance <= -0.01]
+
+    def get_object(self):
+        for b in self.get_queryset():
+            if b.id == int(self.kwargs.get('pk')):
+                return b
+        raise Http404()
+
+
 class BillViewSet(
     viewsets.GenericViewSet,
     mixins.ListModelMixin,
@@ -86,6 +112,10 @@ class BillViewSet(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
 ):
+    """
+    CRUD objects of Bill entity
+    note: balanced is not required when creating object
+    """
     serializer_class = serializers.BillSerializer
     permission_classes = (IsAuthenticated, )
     authentication_classes = (SessionAuthentication, BasicAuthentication)
@@ -127,6 +157,10 @@ class PaymentViewSet(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
 ):
+    """
+    CRUD for payment entity,
+    payment indicates money that spent under this bill and by who
+    """
     serializer_class = serializers.PaymentSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication, BasicAuthentication)
@@ -155,6 +189,10 @@ class DebtViewSet(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
 ):
+    """
+    CRUD for Debt entity,
+    debt indicates the money that must be returned to payers
+    """
     serializer_class = serializers.DebtSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication, BasicAuthentication)
