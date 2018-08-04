@@ -1,0 +1,68 @@
+{% extends "webapp/base_master_detail.html" %}
+
+{% block ext_style %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'webapp/style/base.css' %}"/>
+{% endblock ext_style %}
+
+{% block cont_main %}
+
+  <div ng-app="splitwiseApp" ng-controller="SplitwiseApp">
+
+    <button type="button" class="btn btn-success" id="btnNewBill">
+      New Bill
+    </button>
+    <button type="button" class="btn btn-info" id="btnViewBill" ng-disabled="actionDisabled"
+            ng-click="onViewBillClicked()">
+      View Bill
+    </button>
+    <button type="button" class="btn btn-warning" id="btnEditBill" ng-disabled="actionDisabled">
+      Edit Bill
+    </button>
+    <button type="button" class="btn btn-danger" id="btnDeleteBill" ng-disabled="actionDisabled">
+      Delete Bill
+    </button>
+
+    <div class="container" style="height: 20px;"></div>
+
+    <table class="bill-table table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th></th>
+        <th>id</th>
+        <th>title</th>
+        <th>desc</th>
+        <th>amount</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      {% verbatim %}
+      <tr ng-repeat="x in splitBills">
+        <td>
+          <input
+              class="check-input"
+              type="checkbox"
+              id="check_{{ x.pk }}"
+              ng-model="x.selected"
+              ng-click="onCheckClick(x)">
+        </td>
+        <td>{{ x.pk }}</td>
+        <td>{{ x.title }}</td>
+        <td>{{ x.desc }}</td>
+        <td>{{ x.amount }}</td>
+      </tr>
+      {% endverbatim %}
+      </tbody>
+
+    </table>
+
+  </div>
+
+{% endblock cont_main %}
+
+
+{% block ext_script %}
+  {% load static %}
+  <script src="{% static 'webapp/script/dashboard.js' %}"></script>
+{% endblock ext_script %}

@@ -1,0 +1,23 @@
+{% extends "webapp/base.html" %}
+
+{% block content %}
+
+  <div class="col-md-3">
+    {% block cont_left %}
+      <h4>no left menu</h4>
+    {% endblock cont_left %}
+  </div>
+
+  <div class="col-md-6">
+    {% block cont_main %}
+      <h1>no main content</h1>
+    {% endblock cont_main %}
+  </div>
+
+  <div class="col-md-3">
+    {% block cont_right %}
+      <h4>no right menu</h4>
+    {% endblock cont_right %}
+  </div>
+
+{% endblock content %}

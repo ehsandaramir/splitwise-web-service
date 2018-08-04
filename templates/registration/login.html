@@ -1,0 +1,14 @@
+{% extends 'webapp/base_spa.html' %}
+
+{% block cont_main %}
+
+  <form class="login" method="POST" action="">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <li><input type="submit" class="logBut" value="Log in"/></li>
+  </form>
+
+{% endblock %}
