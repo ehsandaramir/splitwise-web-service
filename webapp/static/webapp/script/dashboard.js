@@ -1,12 +1,19 @@
 var app = angular.module('splitwiseApp', []);
 
-app.controller('SplitwiseApp', function ($scope, $http) {
+app.controller('SplitwiseApp', function ($scope, $http, $window) {
 
   $scope.splitBills = [];
   $scope.actionDisabled = false;
   $scope.selectedCount = 0;
 
-  $http.get('/api/bills/')
+  $scope.modalViewBillVisible = false;
+
+  $http.defaults.xsrfCookieName = 'csrftoken';
+  $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+  function loadBillTable() {
+    $scope.splitBills = {};
+    $http.get('/api/bills/')
       .then(function (response) {
         if (response.status === 200) {
           console.log('split bills retrieved successfully');
@@ -23,6 +30,10 @@ app.controller('SplitwiseApp', function ($scope, $http) {
           $scope.splitBills = [];
         }
       });
+  }
+
+  loadBillTable();
+
 
   $scope.onCheckClick = function (x) {
     if (x.selected)
@@ -34,21 +45,27 @@ app.controller('SplitwiseApp', function ($scope, $http) {
     console.log('selectedCount: ' + $scope.selectedCount);
   };
 
-  $scope.onViewBillClicked = function () {
-    let selectedCount = 0;
-    let selectedBill;
-    $scope.splitBills.forEach(element => {
-      if (element.selected) {
-        selectedCount++;
-        selectedBill = element;
-      }
-    });
+  $scope.onViewBillClicked = function (item) {
+    console.log('view on ' + item.pk);
+    $window.location.href = 'view/' + item.pk;
+  };
 
-    if (selectedCount === 1) {
-      console.log(selectedBill);
-    }
-    else {
-      alert('please select exactly one bill');
-    }
-  }
+  $scope.onEditBillClicked = function (item) {
+    console.log('edit on ' + item.pk);
+    $window.location.href = 'edit/' + item.pk;
+  };
+
+  $scope.onDeleteBillClicked = function (item) {
+    console.log('delete on ' + item.pk);
+    $http({
+      method: 'DELETE',
+      url: '/api/bills/' + item.pk + '/',
+    })
+
+    // $http.delete('/api/bills/' + item.pk + '/')
+        .then(function (response) {
+          loadBillTable();
+        });
+  };
+
 });

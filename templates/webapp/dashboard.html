@@ -12,51 +12,56 @@
     <button type="button" class="btn btn-success" id="btnNewBill">
       New Bill
     </button>
-    <button type="button" class="btn btn-info" id="btnViewBill" ng-disabled="actionDisabled"
-            ng-click="onViewBillClicked()">
-      View Bill
-    </button>
-    <button type="button" class="btn btn-warning" id="btnEditBill" ng-disabled="actionDisabled">
-      Edit Bill
-    </button>
-    <button type="button" class="btn btn-danger" id="btnDeleteBill" ng-disabled="actionDisabled">
-      Delete Bill
-    </button>
 
+    <!-- spacer -->
     <div class="container" style="height: 20px;"></div>
 
-    <table class="bill-table table table-bordered table-striped">
-      <thead>
-      <tr>
-        <th></th>
-        <th>id</th>
-        <th>title</th>
-        <th>desc</th>
-        <th>amount</th>
-      </tr>
-      </thead>
+    <div class="panel panel-primary">
+      <!-- all bills table -->
+      <table class="bill-table table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th></th>
+          <th>Id</th>
+          <th>Title</th>
+          <th>Desc</th>
+          <th>Amount</th>
+          <th>Action</th>
+        </tr>
+        </thead>
 
-      <tbody>
-      {% verbatim %}
-      <tr ng-repeat="x in splitBills">
-        <td>
-          <input
-              class="check-input"
-              type="checkbox"
-              id="check_{{ x.pk }}"
-              ng-model="x.selected"
-              ng-click="onCheckClick(x)">
-        </td>
-        <td>{{ x.pk }}</td>
-        <td>{{ x.title }}</td>
-        <td>{{ x.desc }}</td>
-        <td>{{ x.amount }}</td>
-      </tr>
-      {% endverbatim %}
-      </tbody>
+        <tbody>
+        {% verbatim %}
+        <tr ng-repeat="x in splitBills">
+          <td>
+            <input
+                class="check-input"
+                type="checkbox"
+                id="check_{{ x.pk }}"
+                ng-model="x.selected"
+                ng-click="onCheckClick(x)">
+          </td>
+          <td>{{ x.pk }}</td>
+          <td>{{ x.title }}</td>
+          <td>{{ x.desc }}</td>
+          <td>{{ x.amount }}</td>
+          <td>
+            <button type="button" class="btn btn-info" ng-click="onViewBillClicked(x)">
+              <span>V</span>
+            </button>
+            <button type="button" class="btn btn-warning" ng-click="onEditBillClicked(x)">
+              <span>E</span>
+            </button>
+            <button type="button" class="btn btn-danger" ng-click="onDeleteBillClicked(x)">
+              <span>D</span>
+            </button>
+          </td>
+        </tr>
+        {% endverbatim %}
+        </tbody>
 
-    </table>
-
+      </table>
+    </div>
   </div>
 
 {% endblock cont_main %}

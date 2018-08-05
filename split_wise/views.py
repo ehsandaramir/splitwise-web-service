@@ -167,17 +167,26 @@ class PaymentViewSet(
 
     def get_queryset(self):
         current_user = self.request.user
+
+        involved_bills_by_creator = Bill.objects.filter(creator=current_user)
+        involved_bills_by_debts = Bill.objects.filter(debts__owed_by=current_user)
+        involved_bills_by_payments = Bill.objects.filter(payments__paid_by=current_user)
+        involved_bills = chain(involved_bills_by_creator, involved_bills_by_debts, involved_bills_by_payments)
+        involved_bills_payments = []
+        for bill in involved_bills:
+            involved_bills_payments += bill.payments.all()
+
         you_paid = Payment.objects.filter(paid_by=current_user)
         paid_to_you = Payment.objects.filter(bill__debts__owed_by=current_user)
 
-        result = chain(you_paid, paid_to_you)
+        result = chain(you_paid, paid_to_you, involved_bills_payments)
         result = sorted(result, key=lambda instance: instance.bill.create_date)
         return result
 
     def get_object(self):
-        for val in self.get_queryset():
-            if val.id == int(self.kwargs.get('pk')):
-                return val
+        for payment in self.get_queryset():
+            if payment.id == int(self.kwargs.get('pk')):
+                return payment
         raise Http404()
 
 

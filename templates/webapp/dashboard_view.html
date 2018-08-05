@@ -1,0 +1,63 @@
+{% extends "webapp/base_master_detail.html" %}
+
+{% block ext_style %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'webapp/style/base.css' %}"/>
+{% endblock ext_style %}
+
+
+{% block cont_main %}
+
+  <div ng-app="splitWiseAppView" ng-controller="SplitWiseAppView">
+    <div class="card">
+
+      <div class="card-header">
+        <h4>Bill Properties</h4>
+      </div>
+
+      <div class="card-body">
+        <div class="form-group">
+          <label for="billTitle">Title</label>
+          <input type="text" class="form-control" id="billTitle" ng-model="item.title">
+        </div>
+        <div class="form-group">
+          <label for="billDesc">Description</label>
+          <input type="text" class="form-control" id="billDesc" ng-model="item.desc">
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <button class="btn btn-success" ng-click="onSubmitClicked()">Submit</button>
+        <button class="btn btn-warning" ng-click="loadBill()">Reset</button>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-header">
+        <h4>Payments</h4>
+      </div>
+
+      <div class="card-body">
+        <table class="table">
+          <tr ng-repeat="payment in payments">
+            <td>
+              <input type="text" ng-model="payment.paid_by.username">
+            </td>
+            <td ng-model="payment.amount">d</td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+{% endblock cont_main %}
+
+
+{% block ext_script %}
+  {% load static %}
+  <script src="{% static 'webapp/script/dashboard_view.js' %}"></script>
+{% endblock ext_script %}

@@ -54,11 +54,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PaymentSerializer(serializers.HyperlinkedModelSerializer):
-    paid_by = UserSerializer()
+    paid_by__read = UserSerializer(source='paid_by', read_only=True)
+    paid_by__write = serializers.PrimaryKeyRelatedField(source='paid_by', queryset=User.objects.all(), write_only=True)
+
+    bill__read = serializers.HyperlinkedRelatedField(source='bill', view_name='bill-detail', read_only=True)
+    bill__write = serializers.PrimaryKeyRelatedField(source='bill', queryset=Bill.objects.all(), write_only=True)
 
     class Meta:
         model = Payment
-        fields = ['url', 'pk', 'bill', 'paid_by', 'amount']
+        fields = ['url', 'pk', 'bill__read', 'bill__write', 'paid_by__read', 'paid_by__write', 'amount']
         read_only_fields = ['pk', ]
 
 
@@ -72,13 +76,12 @@ class DebtSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BillSerializer(serializers.HyperlinkedModelSerializer):
-    creator = UserSerializer()
-    payments = PaymentSerializer(many=True)
-    debts = DebtSerializer(many=True)
+    creator = UserSerializer(many=False, read_only=True)
+    payments = PaymentSerializer(many=True, read_only=True)
+    debts = DebtSerializer(many=True, read_only=True)
 
     class Meta:
         model = Bill
         fields = ['url', 'pk', 'creator', 'title', 'desc', 'create_date', 'amount', 'balance', 'payments', 'debts', ]
-        read_only_fields = ['pk', 'create_date', 'payments', 'debts', 'balance']
-        depth = 1
-
+        read_only_fields = ['url', 'pk', 'creator', 'create_date', 'payments', 'debts', 'balance']
+        # depth = 1
