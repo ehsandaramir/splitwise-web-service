@@ -145,7 +145,8 @@ class BillViewSet(
         raise Http404()
 
     def create(self, request, *args, **kwargs):
-        request.data['creator'] = request.user.id
+        print('here')
+        request.data['creator__write'] = request.user.id
         return super().create(request, *args, **kwargs)
 
 
@@ -180,14 +181,22 @@ class PaymentViewSet(
         paid_to_you = Payment.objects.filter(bill__debts__owed_by=current_user)
 
         result = chain(you_paid, paid_to_you, involved_bills_payments)
-        result = sorted(result, key=lambda instance: instance.bill.create_date)
-        return result
+        return self.union_sort_queryset(result, lambda instance: instance.bill.create_date)
 
     def get_object(self):
         for payment in self.get_queryset():
             if payment.id == int(self.kwargs.get('pk')):
                 return payment
         raise Http404()
+
+    def union_sort_queryset(self, queryset, sort_key):
+        pks = set()
+        result = list()
+        for quantity in queryset:
+            if quantity.pk not in pks:
+                pks.add(quantity.pk)
+                result.append(quantity)
+        return sorted(result, key=sort_key)
 
 
 class DebtViewSet(
@@ -208,15 +217,32 @@ class DebtViewSet(
 
     def get_queryset(self):
         current_user = self.request.user
+
+        involved_bills_by_creator = Bill.objects.filter(creator=current_user)
+        involved_bills_by_debts = Bill.objects.filter(debts__owed_by=current_user)
+        involved_bills_by_payments = Bill.objects.filter(payments__paid_by=current_user)
+        involved_bills = chain(involved_bills_by_creator, involved_bills_by_debts, involved_bills_by_payments)
+        involved_bills_debts = []
+        for bill in involved_bills:
+            involved_bills_debts += bill.debts.all()
+
         you_paid = Debt.objects.filter(owed_by=current_user)
         paid_to_you = Debt.objects.filter(bill__payments__paid_by=current_user)
 
-        result = chain(you_paid, paid_to_you)
-        result = sorted(result, key=lambda instance: instance.bill.create_date)
-        return result
+        result = chain(you_paid, paid_to_you, involved_bills_debts)
+        return self.union_sort_queryset(result, lambda instance: instance.bill.create_date)
 
     def get_object(self):
         for val in self.get_queryset():
             if val.id == int(self.kwargs.get('pk')):
                 return val
         raise Http404()
+
+    def union_sort_queryset(self, queryset, sort_key):
+        pks = set()
+        result = list()
+        for quantity in queryset:
+            if quantity.pk not in pks:
+                pks.add(quantity.pk)
+                result.append(quantity)
+        return sorted(result, key=sort_key)

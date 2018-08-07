@@ -9,13 +9,14 @@
 {% block cont_main %}
 
   <div ng-app="splitWiseAppView" ng-controller="SplitWiseAppView">
-    <div class="card">
 
-      <div class="card-header">
+    <div class="panel panel-success">
+
+      <div class="panel-heading">
         <h4>Bill Properties</h4>
       </div>
 
-      <div class="card-body">
+      <div class="panel-body">
         <div class="form-group">
           <label for="billTitle">Title</label>
           <input type="text" class="form-control" id="billTitle" ng-model="item.title">
@@ -26,27 +27,41 @@
         </div>
       </div>
 
-      <div class="card-footer">
+      <div class="panel-footer">
         <button class="btn btn-success" ng-click="onSubmitClicked()">Submit</button>
         <button class="btn btn-warning" ng-click="loadBill()">Reset</button>
       </div>
 
     </div>
 
-    <div class="card">
 
-      <div class="card-header">
+    <div class="panel panel-success">
+
+      <div class="panel-heading">
         <h4>Payments</h4>
       </div>
 
-      <div class="card-body">
-        <table class="table">
+      <div class="panel-body">
+        <table class="table table-bordered">
+
+          <thead>
+          <tr>
+            <th>Paid by user</th>
+            <th>Amount</th>
+          </tr>
+          </thead>
+
+          <tbody>
           <tr ng-repeat="payment in payments">
             <td>
               <input type="text" ng-model="payment.paid_by.username">
             </td>
-            <td ng-model="payment.amount">d</td>
+            <td ng-model="payment.amount">
+              <input type="text" ng-model="payment.amount">
+            </td>
           </tr>
+          </tbody>
+
         </table>
       </div>
 

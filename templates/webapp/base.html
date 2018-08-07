@@ -9,8 +9,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  {#  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"#}
+  {#        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">#}
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- google matrial icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <link rel="stylesheet" type="text/css" href="{% static 'webapp/style/base.css' %}">
   {% block ext_style %}{% endblock ext_style %}
@@ -18,34 +23,63 @@
 </head>
 <body>
 
-{% block navbar %}
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <a class="navbar-brand" href="/">SPLIT WISE</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'webapp-main' %}">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'webapp-dashboard' %}">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-        </li>
-      </ul>
+{% block navbar %}
+  <nav class="navbar navbar-inverse navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">SPLIT WISE</a>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#baseNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+
+      <div class="collapse navbar-collapse" id="baseNavbar">
+
+        {#    navbar left aligned btns #}
+        <ul class="nav navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'webapp-main' %}">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'webapp-dashboard' %}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+        </ul>
+
+        {#      navbar right aligned btns #}
+        <ul class="nav navbar-nav navbar-right">
+          {% if user %}
+            <li class="nav-item">
+              <a href="#">
+                <span
+                    class="glyphicon glyphicon-user"></span> {{ user.profile.first_name }} {{ user.profile.last_name }}
+              </a>
+            </li>
+            <li class="nav-item"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>
+              Logout</a></li>
+          {% else %}
+            <li class="nav-item"><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li class="nav-item"><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+            </li>
+          {% endif %}
+        </ul>
+
+      </div>
     </div>
   </nav>
 {% endblock navbar %}
 
+
 <div class="container-fluid" style="height: 20px"></div>
 
 
-<div class="container" style="width: 100%">
+<div class="container-fluid">
 
   <div class="row">
     {% block content %}

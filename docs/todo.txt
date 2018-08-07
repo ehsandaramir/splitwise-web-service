@@ -1,0 +1,9 @@
+
+bug fix:
+    - when we logout still login buttons are on top
+
+
+feature:
+    - show and edit all payments and debts
+        done:
+            - show payments

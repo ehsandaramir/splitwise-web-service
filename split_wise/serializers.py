@@ -54,34 +54,41 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PaymentSerializer(serializers.HyperlinkedModelSerializer):
-    paid_by__read = UserSerializer(source='paid_by', read_only=True)
+    paid_by = UserSerializer(read_only=True)
     paid_by__write = serializers.PrimaryKeyRelatedField(source='paid_by', queryset=User.objects.all(), write_only=True)
 
-    bill__read = serializers.HyperlinkedRelatedField(source='bill', view_name='bill-detail', read_only=True)
+    bill = serializers.HyperlinkedRelatedField(view_name='bill-detail', read_only=True)
     bill__write = serializers.PrimaryKeyRelatedField(source='bill', queryset=Bill.objects.all(), write_only=True)
 
     class Meta:
         model = Payment
-        fields = ['url', 'pk', 'bill__read', 'bill__write', 'paid_by__read', 'paid_by__write', 'amount']
+        fields = ['url', 'pk', 'bill', 'bill__write', 'paid_by', 'paid_by__write', 'amount']
         read_only_fields = ['pk', ]
 
 
 class DebtSerializer(serializers.HyperlinkedModelSerializer):
-    owed_by = UserSerializer()
+    owed_by = UserSerializer(read_only=True)
+    owed_by__write = serializers.PrimaryKeyRelatedField(source='owed_by', queryset=User.objects.all(), write_only=True)
+
+    bill = serializers.HyperlinkedRelatedField(view_name='bill-detail', read_only=True)
+    bill__write = serializers.PrimaryKeyRelatedField(source='bill', queryset=Bill.objects.all(), write_only=True)
 
     class Meta:
         model = Debt
-        fields = ['url', 'pk', 'bill', 'owed_by', 'amount']
+        fields = ['url', 'pk', 'bill', 'owed_by', 'owed_by__write', 'amount']
         read_only_fields = ['pk', ]
 
 
 class BillSerializer(serializers.HyperlinkedModelSerializer):
     creator = UserSerializer(many=False, read_only=True)
+    creator__write = serializers.PrimaryKeyRelatedField(source='creator', queryset=User.objects.all(), write_only=True)
+
     payments = PaymentSerializer(many=True, read_only=True)
     debts = DebtSerializer(many=True, read_only=True)
 
     class Meta:
         model = Bill
-        fields = ['url', 'pk', 'creator', 'title', 'desc', 'create_date', 'amount', 'balance', 'payments', 'debts', ]
+        fields = ['url', 'pk', 'creator', 'creator__write', 'title', 'desc', 'create_date', 'amount', 'balance',
+                  'payments', 'debts', ]
         read_only_fields = ['url', 'pk', 'creator', 'create_date', 'payments', 'debts', 'balance']
         # depth = 1

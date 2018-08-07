@@ -127,3 +127,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = 'webapp-dashboard'
+LOGOUT_REDIRECT_URL = 'webapp-main'
