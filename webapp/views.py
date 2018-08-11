@@ -11,8 +11,10 @@ def webapp_main(request):
     return render(request, 'webapp/main.html', context)
 
 
+@login_required
 def webapp_dashboard(request):
     context = dict()
+    context['user'] = None
 
     if request.user.is_authenticated:
         context['user'] = request.user

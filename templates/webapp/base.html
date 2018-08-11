@@ -54,20 +54,10 @@
 
         {#      navbar right aligned btns #}
         <ul class="nav navbar-nav navbar-right">
-          {% if user %}
-            <li class="nav-item">
-              <a href="#">
-                <span
-                    class="glyphicon glyphicon-user"></span> {{ user.profile.first_name }} {{ user.profile.last_name }}
-              </a>
-            </li>
-            <li class="nav-item"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>
-              Logout</a></li>
-          {% else %}
+          {% block navbar_auth_actions %}
             <li class="nav-item"><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
             <li class="nav-item"><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-            </li>
-          {% endif %}
+          {% endblock navbar_auth_actions %}
         </ul>
 
       </div>

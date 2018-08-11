@@ -2,13 +2,61 @@
 
 {% block cont_main %}
 
-  <form class="login" method="POST" action="">
+  <div class="well" style="text-align: center; margin: 0 auto; max-width: 600px;">
+    <form class="form-horizontal" method="POST" action="">
 
     {% csrf_token %}
 
-    {{ form.as_p }}
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          {#      <p>#}
+          {#        Your username and password didn't match.#}
+          {#        Please try again.#}
+          {#      </p>#}
+          <ul>
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
 
-    <li><input type="submit" class="logBut" value="Log in"/></li>
-  </form>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="{{ form.username.id_for_label }}" maxlength="30"
+                 name="{{ form.username.html_name }}" type="text"/>
+        </div>
+        {{ form.username.errors }}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="{{ form.password.id_for_label }}" maxlength="30"
+                 name="{{ form.password.html_name }}" type="password"/>
+        </div>
+        {{ form.password.errors }}
+      </div>
+
+      {#    <div class="from-group">#}
+      {#      <label class="control-label col-sm-2" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>#}
+      {#      <div class="col-sm-10">#}
+      {#        <input class="form-control" id="{{ form.password.id_for_label }}" maxlength="30" name="{{ form.password.html_name }}" type="password" />#}
+      {#      </div>#}
+      {#      {{ form.password.errors }}#}
+      {#    </div>#}
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <input type="submit" class="form-control btn btn-success" value="Log in"/>
+        </div>
+      </div>
+
+    </form>
+
+    <span>not registered? <a href="#">register</a> - <a href="#">forgot password</a></span>
+
+  </div>
 
 {% endblock %}
