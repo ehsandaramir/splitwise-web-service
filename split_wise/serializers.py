@@ -75,7 +75,7 @@ class DebtSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Debt
-        fields = ['url', 'pk', 'bill', 'owed_by', 'owed_by__write', 'amount']
+        fields = ['url', 'pk', 'bill', 'bill__write', 'owed_by', 'owed_by__write', 'amount']
         read_only_fields = ['pk', ]
 
 

@@ -1,0 +1,72 @@
+{% extends 'webapp/base_spa.html' %}
+
+
+{% block cont_main %}
+
+  <div class="well" style="text-align: center; margin: 0 auto; max-width: 600px;" ng-app="SignupApp"
+       ng-controller="signupApp">
+    <div class="form-horizontal">
+
+      <div class="alert alert-danger" ng-show="results.errors">
+        <ul>
+          {% verbatim %}
+          <li ng-repeat="(field, err) in results.errors">{{ field }}: {{ err[0] }}</li>
+          {% endverbatim %}
+        </ul>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="signup-firstname">First Name:</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="signup-firstname" maxlength="30"
+                 name="First Name" type="text" placeholder="first name" ng-model="toWrite.profile.first_name"/>
+        </div>
+        {#        {{ form.username.errors }}#}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="signup-lastname">Last Name:</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="signup-lastname" maxlength="30"
+                 name="Last Name" type="text" placeholder="last name" ng-model="toWrite.profile.last_name"/>
+        </div>
+        {#        {{ form.username.errors }}#}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="signup-username">Username</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="signup-username" maxlength="30"
+                 name="username" type="text" placeholder="username" ng-model="toWrite.username"/>
+        </div>
+        {#        {{ form.password.errors }}#}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="signup-password">Password</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="signup-password" maxlength="30"
+                 name="password" type="password" placeholder="password" ng-model="toWrite.password"/>
+        </div>
+        {#        {{ form.password.errors }}#}
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button class="btn btn-success" ng-click="onSignupClick()">Signup</button>
+        </div>
+      </div>
+
+    </div>
+
+    <span>by signing up you accept <a href="#">terms of service</a></span>
+
+  </div>
+
+{% endblock %}
+
+
+{% block ext_script %}
+  {% load static %}
+  <script src="{% static 'webapp/script/signup.js' %}"></script>
+{% endblock ext_script %}

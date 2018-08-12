@@ -31,3 +31,9 @@ def webapp_view(request, pk):
         context['user'] = request.user
 
     return render(request, 'webapp/dashboard_view.html')
+
+
+def webapp_signup(request):
+    context = dict()
+    context['user'] = request.user
+    return render(request, 'registration/signup.html', context)

@@ -14,10 +14,20 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-  <!-- google matrial icons -->
+  <!-- google material icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+  <!-- Angular Material style sheet -->
+  {#  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">#}
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.10/angular-material.min.css"/>
+
   <link rel="stylesheet" type="text/css" href="{% static 'webapp/style/base.css' %}">
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+        integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+        crossorigin="anonymous">
+
   {% block ext_style %}{% endblock ext_style %}
 
 </head>
@@ -55,7 +65,8 @@
         {#      navbar right aligned btns #}
         <ul class="nav navbar-nav navbar-right">
           {% block navbar_auth_actions %}
-            <li class="nav-item"><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li class="nav-item"><a href="{% url 'webapp-signup' %}"><span class="glyphicon glyphicon-user"></span> Sign
+              Up</a></li>
             <li class="nav-item"><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
           {% endblock navbar_auth_actions %}
         </ul>
@@ -83,7 +94,14 @@
 </div>
 
 
+<!-- Angular Material Library -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-messages.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.10/angular-material.min.js"></script>
+
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -94,8 +112,10 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 
+
 <!-- cookie parser library -->
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
 
 {% block ext_script %}{% endblock ext_script %}
 

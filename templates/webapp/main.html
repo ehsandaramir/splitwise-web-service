@@ -1,3 +1,28 @@
 {% extends "webapp/base_spa.html" %}
 
-<h1>web app main page</h1>
+
+{% block cont_main %}
+  <div ng-app="MainApp">
+
+    <div class="container">
+      <md-toolbar>
+        <h1>SPLIT WISE</h1>
+      </md-toolbar>
+
+      <md-sidenav md-is-locked-open="true">
+        Amir
+      </md-sidenav>
+
+      <md-content flex>
+        test
+      </md-content>
+    </div>
+
+  </div>
+{% endblock cont_main %}
+
+
+{% block ext_script %}
+  {% load static %}
+  <script src="{% static 'webapp/script/main.js' %}"></script>
+{% endblock ext_script %}

@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 
 from split_wise import serializers
 from split_wise.models import Profile, Bill, Payment, Debt
+from split_wise.permissions import IsAuthenticatedOrCreateOnly
 
 
 class ProfileViewSet(mixins.ListModelMixin,
@@ -36,7 +37,7 @@ class UserViewSet(
     note1: there is a Profile model that is one-to-one with user model
     """
     serializer_class = serializers.UserSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrCreateOnly,)
     authentication_classes = (SessionAuthentication, BasicAuthentication)
 
     def get_queryset(self):
