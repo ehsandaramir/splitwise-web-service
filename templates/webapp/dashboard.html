@@ -68,10 +68,22 @@
       </div>
 
       <div class="panel-footer">
-        <button class="btn btn-success" style="display: flex;align-items: center;padding:5px 10px;" type="button"
-                id="btnNewBill">
-          <i class="material-icons">add</i> New Bill
-        </button>
+        <div class="list-group">
+          <button class="list-group-item btn btn-success" style="display: flex;align-items: center;padding:5px 10px;"
+                  type="button"
+                  data-toggle="modal" data-target="#modalAddBill"
+                  id="btnNewBill">
+            <i class="material-icons">add</i> Add Bill
+          </button>
+
+          <button class="list-group-item btn btn-primary" style="display: flex;align-items: center;padding:5px 10px;"
+                  type="button" ng-click="loadBillTable()">
+            <i class="material-icons">refresh</i> Refresh
+          </button>
+        </div>
+
+        {% include 'webapp/modal_add_bill.html' %}
+
       </div>
 
     </div>

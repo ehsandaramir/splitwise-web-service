@@ -16,8 +16,8 @@
       </div>
 
       <div class="form-group">
-        <label class="control-label col-sm-2" for="signup-firstname">First Name:</label>
-        <div class="col-sm-10">
+        <label class="control-label col-sm-3" for="signup-firstname">First Name:</label>
+        <div class="col-sm-9">
           <input class="form-control" id="signup-firstname" maxlength="30"
                  name="First Name" type="text" placeholder="first name" ng-model="toWrite.profile.first_name"/>
         </div>
@@ -25,8 +25,8 @@
       </div>
 
       <div class="form-group">
-        <label class="control-label col-sm-2" for="signup-lastname">Last Name:</label>
-        <div class="col-sm-10">
+        <label class="control-label col-sm-3" for="signup-lastname">Last Name:</label>
+        <div class="col-sm-9">
           <input class="form-control" id="signup-lastname" maxlength="30"
                  name="Last Name" type="text" placeholder="last name" ng-model="toWrite.profile.last_name"/>
         </div>
@@ -34,8 +34,17 @@
       </div>
 
       <div class="form-group">
-        <label class="control-label col-sm-2" for="signup-username">Username</label>
-        <div class="col-sm-10">
+        <label class="control-label col-sm-3" for="signup-email">Email:</label>
+        <div class="col-sm-9">
+          <input class="form-control" id="signup-email" maxlength="30"
+                 name="Last Name" type="email" placeholder="email" ng-model="toWrite.email"/>
+        </div>
+        {#        {{ form.username.errors }}#}
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-sm-3" for="signup-username">Username</label>
+        <div class="col-sm-9">
           <input class="form-control" id="signup-username" maxlength="30"
                  name="username" type="text" placeholder="username" ng-model="toWrite.username"/>
         </div>
@@ -43,8 +52,8 @@
       </div>
 
       <div class="form-group">
-        <label class="control-label col-sm-2" for="signup-password">Password</label>
-        <div class="col-sm-10">
+        <label class="control-label col-sm-3" for="signup-password">Password</label>
+        <div class="col-sm-9">
           <input class="form-control" id="signup-password" maxlength="30"
                  name="password" type="password" placeholder="password" ng-model="toWrite.password"/>
         </div>
@@ -52,7 +61,7 @@
       </div>
 
       <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
+        <div class="col-sm-offset-3 col-sm-9">
           <button class="btn btn-success" ng-click="onSignupClick()">Signup</button>
         </div>
       </div>

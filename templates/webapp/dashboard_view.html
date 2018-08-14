@@ -17,17 +17,26 @@
       </div>
 
       <div class="panel-body">
+
         <div class="form-group">
           <label for="billTitle">Title</label>
           <input type="text" class="form-control" id="billTitle" ng-model="item.title">
         </div>
+
         <div class="form-group">
           <label for="billDesc">Description</label>
           <input type="text" class="form-control" id="billDesc" ng-model="item.desc">
         </div>
+
+        <div class="form-group">
+          <label for="billAmount">Amount</label>
+          <input type="text" class="form-control" id="billAmount" ng-model="item.amount">
+        </div>
+
         <div class="form-group">
           <h3>Balance: {% verbatim %}{{ item.balance }}{% endverbatim %}</h3>
         </div>
+
       </div>
 
       <div class="panel-footer">

@@ -1,0 +1,51 @@
+<div id="modalAddBill" class="modal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Bill</h4>
+      </div>
+      <div class="modal-body">
+
+        {% verbatim %}
+        <div class="alert-danger" ng-show="addNewBillError.error">
+          <p>
+            {{ addNewBillError.error }}
+          </p>
+        </div>
+        {% endverbatim %}
+
+        <div class="well">
+          <div class="form-horizontal">
+
+            <div class="form-group">
+              <label for="inputBillTitle">Title</label>
+              <input type="text" class="form-control" id="inputBillTitle" placeholder="title" ng-model="newBill.title">
+            </div>
+
+            <div class="form-group">
+              <label for="inputBillDesc">Desc</label>
+              <input type="text" class="form-control" id="inputBillDesc" placeholder="description"
+                     ng-model="newBill.desc">
+            </div>
+
+            <div class="form-group">
+              <label for="inputBillAmount">Amount</label>
+              <input type="text" class="form-control" id="inputBillAmount" placeholder="amount"
+                     ng-model="newBill.amount">
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="onAddBillCloseClick()">Close
+        </button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="onAddBillClick()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -24,7 +24,7 @@ def webapp_dashboard(request):
 
 
 @login_required
-def webapp_view(request, pk):
+def webapp_edit(request, pk):
     context = dict()
 
     if request.user.is_authenticated:

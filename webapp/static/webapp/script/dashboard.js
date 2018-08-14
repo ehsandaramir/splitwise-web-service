@@ -3,6 +3,8 @@ var app = angular.module('splitwiseApp', []);
 app.controller('SplitwiseApp', function ($scope, $http, $window) {
 
   $scope.splitBills = [];
+  $scope.newBill = {};
+  $scope.addNewBillError = {};
   $scope.actionDisabled = false;
   $scope.selectedCount = 0;
 
@@ -11,7 +13,7 @@ app.controller('SplitwiseApp', function ($scope, $http, $window) {
   $http.defaults.xsrfCookieName = 'csrftoken';
   $http.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-  function loadBillTable() {
+  $scope.loadBillTable = function () {
     $scope.splitBills = {};
     $http.get('/api/bills/')
       .then(function (response) {
@@ -30,9 +32,7 @@ app.controller('SplitwiseApp', function ($scope, $http, $window) {
           $scope.splitBills = [];
         }
       });
-  }
-
-  loadBillTable();
+  };
 
 
   $scope.onCheckClick = function (x) {
@@ -47,12 +47,12 @@ app.controller('SplitwiseApp', function ($scope, $http, $window) {
 
   $scope.onViewBillClicked = function (item) {
     console.log('view on ' + item.pk);
-    $window.location.href = 'view/' + item.pk;
+    $window.location = 'view/' + item.pk;
   };
 
   $scope.onEditBillClicked = function (item) {
     console.log('edit on ' + item.pk);
-    $window.location.href = 'edit/' + item.pk;
+    $window.location = 'edit/' + item.pk;
   };
 
   $scope.onDeleteBillClicked = function (item) {
@@ -61,11 +61,38 @@ app.controller('SplitwiseApp', function ($scope, $http, $window) {
       method: 'DELETE',
       url: '/api/bills/' + item.pk + '/',
     })
-
-    // $http.delete('/api/bills/' + item.pk + '/')
         .then(function (response) {
-          loadBillTable();
+          $scope.loadBillTable();
         });
   };
+
+  $scope.onAddBillClick = function () {
+    $http({
+      method: 'POST',
+      url: '/api/bills/',
+      data: JSON.stringify($scope.newBill)
+    }).then(function (response) {
+      console.log('post bill successful');
+      $scope.loadBillTable();
+
+      $scope.addNewBillError = {};
+      $scope.newBill = {};
+      angular.element('#modalAddBill').modal('hide');
+
+    }, function (response) {
+      console.log('post bill failed');
+      $scope.loadBillTable();
+      $scope.addNewBillError.error = 'insertion failed';
+    });
+  };
+
+  $scope.onAddBillCloseClick = function () {
+    $scope.newBill = {};
+    $scope.addNewBillError = {};
+    $scope.loadBillTable();
+    angular.element('#modalAddBill').modal('hide');
+  };
+
+  $scope.loadBillTable();
 
 });
