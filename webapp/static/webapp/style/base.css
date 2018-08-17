@@ -2,3 +2,15 @@
 .bill-table {
     width: 100%;
 }
+
+.amount-paid {
+    color: deepskyblue;
+}
+
+.amount-owed {
+    color: orangered;
+}
+
+.user-username {
+    color: forestgreen;
+}

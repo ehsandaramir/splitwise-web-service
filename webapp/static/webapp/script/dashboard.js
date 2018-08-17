@@ -3,8 +3,12 @@ var app = angular.module('splitwiseApp', []);
 app.controller('SplitwiseApp', function ($scope, $http, $window) {
 
   $scope.splitBills = [];
+
   $scope.newBill = {};
   $scope.addNewBillError = {};
+
+  $scope.viewBill = {};
+
   $scope.actionDisabled = false;
   $scope.selectedCount = 0;
 
@@ -12,6 +16,18 @@ app.controller('SplitwiseApp', function ($scope, $http, $window) {
 
   $http.defaults.xsrfCookieName = 'csrftoken';
   $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+
+  function calculateBalances(bill) {
+    let paid_sum = 0;
+    bill.payments.forEach(pay => paid_sum += pay.amount);
+    bill.paid_sum = paid_sum;
+
+    let owed_sum = 0;
+    bill.debts.forEach(debt => owed_sum += debt.amount);
+    bill.owed_sum = owed_sum;
+  }
+
 
   $scope.loadBillTable = function () {
     $scope.splitBills = {};
@@ -21,7 +37,8 @@ app.controller('SplitwiseApp', function ($scope, $http, $window) {
           console.log('split bills retrieved successfully');
 
           var data = response.data;
-          data.forEach(element => element.selected = false);
+          data.forEach(bill => bill.selected = false);
+          data.forEach(bill => calculateBalances(bill));
 
           $scope.actionDisabled = true;
           $scope.selectedCount = 0;
@@ -45,15 +62,19 @@ app.controller('SplitwiseApp', function ($scope, $http, $window) {
     console.log('selectedCount: ' + $scope.selectedCount);
   };
 
+
   $scope.onViewBillClicked = function (item) {
     console.log('view on ' + item.pk);
-    $window.location = 'view/' + item.pk;
+    $scope.viewBill = item;
+    // $window.location = 'view/' + item.pk;
   };
+
 
   $scope.onEditBillClicked = function (item) {
     console.log('edit on ' + item.pk);
     $window.location = 'edit/' + item.pk;
   };
+
 
   $scope.onDeleteBillClicked = function (item) {
     console.log('delete on ' + item.pk);
@@ -65,6 +86,7 @@ app.controller('SplitwiseApp', function ($scope, $http, $window) {
           $scope.loadBillTable();
         });
   };
+
 
   $scope.onAddBillClick = function () {
     $http({
@@ -86,12 +108,14 @@ app.controller('SplitwiseApp', function ($scope, $http, $window) {
     });
   };
 
+
   $scope.onAddBillCloseClick = function () {
     $scope.newBill = {};
     $scope.addNewBillError = {};
     $scope.loadBillTable();
     angular.element('#modalAddBill').modal('hide');
   };
+
 
   $scope.loadBillTable();
 

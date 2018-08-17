@@ -25,7 +25,6 @@
         <table class="bill-table table table-bordered table-striped">
           <thead>
           <tr>
-            <th></th>
             <th>Id</th>
             <th>Title</th>
             <th>Desc</th>
@@ -37,20 +36,13 @@
           <tbody>
           {% verbatim %}
           <tr ng-repeat="x in splitBills">
-            <td>
-              <input
-                  class="check-input"
-                  type="checkbox"
-                  id="check_{{ x.pk }}"
-                  ng-model="x.selected"
-                  ng-click="onCheckClick(x)">
-            </td>
             <td>{{ x.pk }}</td>
             <td>{{ x.title }}</td>
             <td>{{ x.desc }}</td>
             <td>{{ x.amount }}</td>
             <td>
-              <button type="button" class="btn btn-info" ng-click="onViewBillClicked(x)">
+              <button type="button" class="btn btn-info"
+                      data-toggle="modal" data-target="#modalViewBill" ng-click="onViewBillClicked(x)">
                 <span><i class="material-icons">open_in_new</i></span>
               </button>
               <button type="button" class="btn btn-warning" ng-click="onEditBillClicked(x)">
@@ -65,6 +57,9 @@
           </tbody>
 
         </table>
+
+        {% include 'webapp/modal_view_bill.html' %}
+
       </div>
 
       <div class="panel-footer">

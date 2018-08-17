@@ -6,6 +6,9 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
     $scope.payments = [];
     $scope.debts = [];
     $scope.userOptions = [];
+    $scope.userOptionUsernames = [];
+
+    $scope.tmpPaidBy = '';
 
     let tokens = $window.location.pathname
         .split('?')[0]
@@ -16,11 +19,24 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
     $http.defaults.xsrfCookieName = 'csrftoken';
     $http.defaults.xsrfHeaderName = 'X-CSRFToken';
 
+
+    function calculateBalances(bill) {
+      let paid_sum = 0;
+      bill.payments.forEach(pay => paid_sum += pay.amount);
+      bill.paid_sum = paid_sum;
+
+      let owed_sum = 0;
+      bill.debts.forEach(debt => owed_sum += debt.amount);
+      bill.owed_sum = owed_sum;
+    }
+
+
     function usernameToId(username) {
       for (i = 0; i < $scope.userOptions.length; i++)
         if ($scope.userOptions[i].username === username)
           return $scope.userOptions[i].pk;
     }
+
 
     function clearAllNewForm() {
       $scope.newPaymentUsername = '';
@@ -29,12 +45,14 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
       $scope.newDebtAmount = '';
     }
 
+
     function makeWritableBill(bill) {
       let copy = JSON.parse(JSON.stringify(bill));
       copy.creator__write = bill.creator.pk;
 
       return copy;
     }
+
 
     function makeWritablePayments(payments) {
       let result = [];
@@ -49,6 +67,7 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
       return result
     }
 
+
     function makeWritableDebts(debts) {
       let result = [];
       for (i = 0; i < debts.length; i++) {
@@ -62,13 +81,18 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
       return result
     }
 
+
     $scope.loadBill = function () {
       $http.get('/api/bills/' + $scope.pk + '/')
           .then(function (response) {
             if (response.status === 200) {
+              calculateBalances(response.data);
               $scope.item = response.data;
               $scope.payments = response.data.payments;
               $scope.debts = response.data.debts;
+
+              $scope.payments.forEach(element => element.paid_by = element.paid_by.username);
+              $scope.debts.forEach(element => element.owed_by = element.owed_by.username);
 
               clearAllNewForm();
             }
@@ -78,6 +102,7 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
           })
     };
 
+
     $scope.loadUsers = function () {
       $http({
         method: 'GET',
@@ -85,8 +110,11 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
       })
           .then(function (response) {
             $scope.userOptions = response.data;
+            $scope.userOptionUsernames = [];
+            $scope.userOptions.forEach(element => $scope.userOptionUsernames.push(element.username));
           })
     };
+
 
     $scope.onSubmitClicked = function () {
       let str_data = JSON.stringify(makeWritableBill($scope.item));
@@ -96,6 +124,7 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
         data: str_data
       });
     };
+
 
     $scope.onNewPayerClick = function () {
       console.log('new payer click');
@@ -116,6 +145,7 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
         paid_by__write: paid_by,
         amount: parseFloat($scope.newPaymentAmount)
       };
+
       $http({
         method: 'POST',
         url: '/api/payments/',
@@ -125,6 +155,7 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
             $scope.loadBill();
           });
     };
+
 
     $scope.onSavePaymentsClick = function () {
       console.log('save all payments');
@@ -141,6 +172,32 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
         })
       }
     };
+
+
+    $scope.saveChangedPayment = function (payment) {
+      console.log('on payment user change');
+      payment.paid_by__write = usernameToId(payment.paid_by);
+      payment.bill__write = $scope.pk;
+
+      $http({
+        method: 'PUT',
+        url: '/api/payments/' + payment.pk + '/',
+        data: JSON.stringify(payment)
+      }).then(function (response) {
+        $scope.loadBill();
+      });
+    };
+
+
+    $scope.deletePayment = function (payment) {
+      $http({
+        method: 'DELETE',
+        url: '/api/payments/' + payment.pk + '/'
+      }).then(function (response) {
+        $scope.loadBill();
+      })
+    };
+
 
     $scope.onNewDebtClick = function () {
       console.log('new debt click');
@@ -173,6 +230,7 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
       clearAllNewForm();
     };
 
+
     $scope.onSaveDebtsClick = function () {
       console.log('save all debts');
       let writableData = makeWritableDebts($scope.debts);
@@ -188,6 +246,22 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
         });
       }
     };
+
+
+    $scope.saveChangedDebt = function (debt) {
+      console.log('on debt user change');
+      debt.owed_by__write = usernameToId(debt.owed_by);
+      debt.bill__write = $scope.pk;
+
+      $http({
+        method: 'PUT',
+        url: '/api/debts/' + debt.pk + '/',
+        data: JSON.stringify(debt)
+      }).then(function (response) {
+        $scope.loadBill();
+      });
+    };
+
 
     $scope.loadUsers();
     $scope.loadBill();

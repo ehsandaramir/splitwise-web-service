@@ -49,9 +49,11 @@
 
     <div class="panel panel-success">
 
+      {% verbatim %}
       <div class="panel-heading">
-        <h4>Payments</h4>
+        <h4>Payments ({{ item.paid_sum }})</h4>
       </div>
+      {% endverbatim %}
 
       <div class="panel-body">
         <table class="table table-bordered">
@@ -60,28 +62,36 @@
           <tr>
             <th>Paid by user</th>
             <th>Amount</th>
+            <th>Action</th>
           </tr>
           </thead>
 
           <tbody>
+          {% verbatim %}
           <tr ng-repeat="payment in payments">
             <td>
-              <select class="selectpicker form-control" ng-model="payment.paid_by.username">
-                <option data-key="" ng-repeat="user in userOptions">{% verbatim %}{{ user.username }}{% endverbatim %}
-                </option>
+              <select class="form-control" ng-model="payment.paid_by" ng-change="saveChangedPayment(payment)"
+                      ng-options="val for val in userOptionUsernames">
               </select>
             </td>
             <td>
-              <input type="text" ng-model="payment.amount">
+              <input type="text" ng-model="payment.amount" ng-change="saveChangedPayment(payment)">
+            </td>
+            <td>
+              <button class="btn btn-danger" ng-click="deletePayment(payment)">
+                <span><i class="material-icons">delete</i></span>
+              </button>
             </td>
           </tr>
+          {% endverbatim %}
 
           <tr>
             <td>
-              <select class="selectpicker form-control" ng-model="newPaymentUsername">
-                <option data-key="" ng-repeat="user in userOptions">{% verbatim %}{{ user.username }}{% endverbatim %}
-                </option>
+              {% verbatim %}
+              <select class="form-control" ng-model="newPaymentUsername"
+                      ng-options="val for val in userOptionUsernames">
               </select>
+              {% endverbatim %}
             </td>
             <td>
               <input type="text" ng-model="newPaymentAmount">
@@ -93,7 +103,7 @@
       </div>
 
       <div class="panel-footer">
-        <button class="btn btn-primary" ng-click="onSavePaymentsClick()">Save Payment Changes</button>
+        {#        <button class="btn btn-primary" ng-click="onSavePaymentsClick()">Save Payment Changes</button>#}
         <button class="btn btn-success" ng-click="onNewPayerClick()">New Payment</button>
       </div>
 
@@ -102,9 +112,11 @@
 
     <div class="panel panel-success">
 
+      {% verbatim %}
       <div class="panel-heading">
-        <h4>Debts</h4>
+        <h4>Debts ({{ item.owed_sum }})</h4>
       </div>
+      {% endverbatim %}
 
       <div class="panel-body">
         <table class="table table-bordered">
@@ -119,21 +131,18 @@
           <tbody>
           <tr ng-repeat="debt in debts">
             <td>
-              <select class="selectpicker form-control" ng-model="debt.owed_by.username">
-                <option data-key="" ng-repeat="user in userOptions">{% verbatim %}{{ user.username }}{% endverbatim %}
-                </option>
+              <select class="form-control" ng-model="debt.owed_by" ng-change="saveChangedDebt(debt)"
+                      ng-options="val for val in userOptionUsernames">
               </select>
             </td>
             <td>
-              <input type="text" ng-model="debt.amount">
+              <input type="text" ng-model="debt.amount" ng-change="saveChangedDebt(debt)">
             </td>
           </tr>
 
           <tr>
             <td>
-              <select class="selectpicker form-control" ng-model="newDebtUsername">
-                <option data-key="" ng-repeat="user in userOptions">{% verbatim %}{{ user.username }}{% endverbatim %}
-                </option>
+              <select class="form-control" ng-model="newDebtUsername" ng-options="val for val in userOptionUsernames">
               </select>
             </td>
             <td>
@@ -146,7 +155,7 @@
       </div>
 
       <div class="panel-footer">
-        <button class="btn btn-primary" ng-click="onSaveDebtsClick()">Save Debt Changes</button>
+        {#        <button class="btn btn-primary" ng-click="onSaveDebtsClick()">Save Debt Changes</button>#}
         <button class="btn btn-success" ng-click="onNewDebtClick()">New Debt</button>
       </div>
 
