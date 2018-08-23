@@ -37,3 +37,13 @@ def webapp_signup(request):
     context = dict()
     context['user'] = request.user
     return render(request, 'registration/signup.html', context)
+
+
+@login_required
+def webapp_profile(request):
+    context = dict()
+
+    if request.user.is_authenticated:
+        context['user'] = request.user
+
+    return render(request, 'webapp/profile.html')

@@ -1,0 +1,35 @@
+{% extends 'webapp/base_master_detail.html' %}
+
+
+{% block cont_main %}
+    <div ng-app="ProfileApp" ng-controller="profileApp">
+
+        <div class="panel panel-warning">
+
+            <div class="panel-heading">
+                <h4>User Profile</h4>
+            </div>
+
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <label for="userFormUsername">Username</label>
+                    <input type="text" id="userFormUsername" ng-model="user.username" disabled>
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <button class="btn btn-success" ng-click="saveChanges()">
+                    <span><i class="material-icons">save</i></span> Save
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock cont_main %}
+
+
+{% block ext_script %}
+    {% load static %}
+    <script src="{% static 'webapp/script/profile.js' %}"></script>
+{% endblock ext_script %}

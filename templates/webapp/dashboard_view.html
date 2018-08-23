@@ -96,16 +96,21 @@
             <td>
               <input type="text" ng-model="newPaymentAmount">
             </td>
+              <td>
+                  <button class="btn btn-success" ng-click="onNewPayerClick()">
+                      <span><i class="material-icons">add</i></span>
+                  </button>
+              </td>
           </tr>
           </tbody>
 
         </table>
       </div>
 
-      <div class="panel-footer">
+        {#      <div class="panel-footer">#}
         {#        <button class="btn btn-primary" ng-click="onSavePaymentsClick()">Save Payment Changes</button>#}
-        <button class="btn btn-success" ng-click="onNewPayerClick()">New Payment</button>
-      </div>
+        {#        <button class="btn btn-success" ng-click="onNewPayerClick()">New Payment</button>#}
+        {#      </div>#}
 
     </div>
 
@@ -125,6 +130,7 @@
           <tr>
             <th>Debt of user</th>
             <th>Amount</th>
+              <th>Action</th>
           </tr>
           </thead>
 
@@ -138,6 +144,11 @@
             <td>
               <input type="text" ng-model="debt.amount" ng-change="saveChangedDebt(debt)">
             </td>
+              <td>
+                  <button class="btn btn-danger" ng-click="deleteDebt(debt)">
+                      <span><i class="material-icons">delete</i></span>
+                  </button>
+              </td>
           </tr>
 
           <tr>
@@ -148,16 +159,21 @@
             <td>
               <input type="text" ng-model="newDebtAmount">
             </td>
+              <td>
+                  <button class="btn btn-success" ng-click="onNewDebtClick()">
+                      <span><i class="material-icons">add</i></span>
+                  </button>
+              </td>
           </tr>
           </tbody>
 
         </table>
       </div>
 
-      <div class="panel-footer">
+        {#      <div class="panel-footer">#}
         {#        <button class="btn btn-primary" ng-click="onSaveDebtsClick()">Save Debt Changes</button>#}
-        <button class="btn btn-success" ng-click="onNewDebtClick()">New Debt</button>
-      </div>
+        {#        <button class="btn btn-success" ng-click="onNewDebtClick()">New Debt</button>#}
+        {#      </div>#}
 
     </div>
 

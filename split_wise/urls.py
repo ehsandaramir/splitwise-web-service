@@ -7,6 +7,8 @@ from split_wise import views
 router = DefaultRouter()
 router.register(r'profiles', views.ProfileViewSet, base_name='profile')
 router.register(r'users', views.UserViewSet, base_name='user')
+router.register(r'self', views.SelfUserViewSet, base_name='self')
+
 router.register(r'bills', views.BillViewSet, base_name='bill')
 router.register(r'payments', views.PaymentViewSet, base_name='payment')
 router.register(r'debts', views.DebtViewSet, base_name='debt')

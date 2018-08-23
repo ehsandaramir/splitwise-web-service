@@ -263,6 +263,16 @@ app.controller('SplitWiseAppView', ['$scope', '$http', '$window',
     };
 
 
+      $scope.deleteDebt = function (debt) {
+          $http({
+              method: 'DELETE',
+              url: '/api/debts/' + debt.pk + '/'
+          }).then(function (response) {
+              $scope.loadBill();
+          })
+      };
+
+
     $scope.loadUsers();
     $scope.loadBill();
   }]);

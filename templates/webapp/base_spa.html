@@ -1,5 +1,19 @@
 {% extends "webapp/base.html" %}
 
+
+{% if user %}
+    {% block navbar_auth_actions %}
+
+        <li class="nav-item"><a href="{% url 'webapp-profile' %}">
+            <span class="glyphicon glyphicon-user"></span> {{ user.profile.first_name }} {{ user.profile.last_name }}
+        </a></li>
+        <li class="nav-item"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+        </li>
+
+    {% endblock navbar_auth_actions %}
+{% endif %}
+
+
 {% block content %}
 
   <div class="col-md-1"></div>

@@ -7,4 +7,5 @@ urlpatterns = [
     path('signup/', views.webapp_signup, name='webapp-signup'),
     path('dashboard/', views.webapp_dashboard, name='webapp-dashboard'),
     path('dashboard/edit/<int:pk>/', views.webapp_edit, name='webapp-edit'),
+    path('profile/', views.webapp_profile, name='webapp-profile'),
 ]

@@ -2,14 +2,13 @@ from itertools import chain
 
 from django.contrib.auth.models import User
 from django.http import Http404
-from rest_framework import mixins, viewsets, permissions
+from rest_framework import mixins, viewsets, permissions, generics
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 from split_wise import serializers
 from split_wise.models import Profile, Bill, Payment, Debt
-from split_wise.permissions import IsAuthenticatedOrCreateOnly
 
 
 class ProfileViewSet(mixins.ListModelMixin,
@@ -29,16 +28,17 @@ class UserViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin
+    # mixins.UpdateModelMixin,
+    # mixins.DestroyModelMixin
 ):
     """
     view set for CRUD django default user model
     note1: there is a Profile model that is one-to-one with user model
     """
     serializer_class = serializers.UserSerializer
-    permission_classes = (IsAuthenticatedOrCreateOnly,)
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+
+    # permission_classes = (IsAuthenticatedOrCreateOnly,)
+    # authentication_classes = (SessionAuthentication, BasicAuthentication)
 
     def get_queryset(self):
         if self.request.query_params:
@@ -66,6 +66,17 @@ class UserViewSet(
                 return self.request.user
             else:
                 raise PermissionDenied('could not change user that is not you!')
+
+
+class SelfUserViewSet(
+    viewsets.GenericViewSet,
+    generics.RetrieveUpdateAPIView):
+    serializer_class = serializers.UserSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+
+    def get_object(self):
+        return self.request.user
 
 
 class BalanceViewSet(
