@@ -1,6 +1,5 @@
 from itertools import chain
 
-from django.contrib.auth.models import User
 from django.http import Http404
 from rest_framework import mixins, viewsets, permissions, generics
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -8,7 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 from split_wise import serializers
-from split_wise.models import Profile, Bill, Payment, Debt
+from split_wise.models import *
 
 
 class ProfileViewSet(mixins.ListModelMixin,
@@ -70,7 +69,8 @@ class UserViewSet(
 
 class SelfUserViewSet(
     viewsets.GenericViewSet,
-    generics.RetrieveUpdateAPIView):
+    generics.RetrieveUpdateAPIView
+):
     serializer_class = serializers.UserSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication, BasicAuthentication)
@@ -134,21 +134,15 @@ class BillViewSet(
 
     def get_queryset(self):
         current_user = self.request.user
-        query_set_create = Bill.objects.filter(creator=current_user)
-        query_set_paid_by = Bill.objects.filter(payments__paid_by=current_user)
-        query_set_owed_by = Bill.objects.filter(debts__owed_by=current_user)
+        groups = current_user.bill_groups.all()
 
-        query_set = list(chain(query_set_create, query_set_paid_by, query_set_owed_by))
+        result = []
+        for group in groups:
+            for bill in group.bills.all():
+                result.append(bill)
 
-        username_set = set()
-        final_result = list()
-        for i in query_set:
-            if i.id not in username_set:
-                username_set.add(i.id)
-                final_result.append(i)
-
-        final_result = sorted(final_result, key=lambda instance: instance.create_date)
-        return final_result
+        print(result)
+        return result
 
     def get_object(self):
         for val in self.get_queryset():
@@ -157,78 +151,27 @@ class BillViewSet(
         raise Http404()
 
     def create(self, request, *args, **kwargs):
-        print('here')
         request.data['creator__write'] = request.user.id
         return super().create(request, *args, **kwargs)
 
 
-class PaymentViewSet(
+class TransactionViewSet(
     viewsets.GenericViewSet,
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
+    mixins.DestroyModelMixin
 ):
-    """
-    CRUD for payment entity,
-    payment indicates money that spent under this bill and by who
-    """
-    serializer_class = serializers.PaymentSerializer
+    serializer_class = serializers.TransactionSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication, BasicAuthentication)
 
     def get_queryset(self):
         current_user = self.request.user
 
-        involved_bills_by_creator = Bill.objects.filter(creator=current_user)
-        involved_bills_by_debts = Bill.objects.filter(debts__owed_by=current_user)
-        involved_bills_by_payments = Bill.objects.filter(payments__paid_by=current_user)
-        involved_bills = chain(involved_bills_by_creator, involved_bills_by_debts, involved_bills_by_payments)
-        involved_bills_payments = []
-        for bill in involved_bills:
-            involved_bills_payments += bill.payments.all()
-
-        you_paid = Payment.objects.filter(paid_by=current_user)
-        paid_to_you = Payment.objects.filter(bill__debts__owed_by=current_user)
-
-        result = chain(you_paid, paid_to_you, involved_bills_payments)
-        return self.union_sort_queryset(result, lambda instance: instance.bill.create_date)
-
-    def get_object(self):
-        for payment in self.get_queryset():
-            if payment.id == int(self.kwargs.get('pk')):
-                return payment
-        raise Http404()
-
-    def union_sort_queryset(self, queryset, sort_key):
-        pks = set()
-        result = list()
-        for quantity in queryset:
-            if quantity.pk not in pks:
-                pks.add(quantity.pk)
-                result.append(quantity)
-        return sorted(result, key=sort_key)
-
-
-class DebtViewSet(
-    viewsets.GenericViewSet,
-    mixins.ListModelMixin,
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-):
-    """
-    CRUD for Debt entity,
-    debt indicates the money that must be returned to payers
-    """
-    serializer_class = serializers.DebtSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-
-    def get_queryset(self):
-        current_user = self.request.user
+        current_user = User()
+        memberships = current_user.memberships
 
         involved_bills_by_creator = Bill.objects.filter(creator=current_user)
         involved_bills_by_debts = Bill.objects.filter(debts__owed_by=current_user)
@@ -238,8 +181,8 @@ class DebtViewSet(
         for bill in involved_bills:
             involved_bills_debts += bill.debts.all()
 
-        you_paid = Debt.objects.filter(owed_by=current_user)
-        paid_to_you = Debt.objects.filter(bill__payments__paid_by=current_user)
+        you_paid = Transaction.objects.filter(owed_by=current_user)
+        paid_to_you = Transaction.objects.filter(bill__payments__paid_by=current_user)
 
         result = chain(you_paid, paid_to_you, involved_bills_debts)
         return self.union_sort_queryset(result, lambda instance: instance.bill.create_date)
@@ -258,3 +201,17 @@ class DebtViewSet(
                 pks.add(quantity.pk)
                 result.append(quantity)
         return sorted(result, key=sort_key)
+
+
+class GroupViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+):
+    queryset = Group.objects.all()
+    serializer_class = serializers.GroupSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
