@@ -1,0 +1,25 @@
+{
+  "title": "bill example 2",
+  "amount": "12.65",
+  "group__write": 1,
+  "transactions": [
+    {
+      "bill__write": 1,
+      "user__write": 1,
+      "amount": "12.65",
+      "direction": 0
+    },
+    {
+      "bill__write": 1,
+      "user__write": 1,
+      "amount": "10.05",
+      "direction": 1
+    },
+    {
+      "bill__write": 1,
+      "user__write": 2,
+      "amount": "2.6",
+      "direction": 1
+    }
+  ]
+}

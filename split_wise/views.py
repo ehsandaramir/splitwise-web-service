@@ -1,7 +1,5 @@
-from itertools import chain
-
 from django.http import Http404
-from rest_framework import mixins, viewsets, permissions, generics
+from rest_framework import mixins, viewsets, permissions
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
@@ -67,55 +65,6 @@ class UserViewSet(
                 raise PermissionDenied('could not change user that is not you!')
 
 
-class SelfUserViewSet(
-    viewsets.GenericViewSet,
-    generics.RetrieveUpdateAPIView
-):
-    serializer_class = serializers.UserSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-
-    def get_object(self):
-        return self.request.user
-
-
-class BalanceViewSet(
-    viewsets.GenericViewSet,
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin
-):
-    serializer_class = serializers.BillSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-
-    def base_queryset(self):
-        current_user = self.request.user
-        query_set_create = Bill.objects.filter(creator=current_user)
-        query_set_paid_by = Bill.objects.filter(payments__paid_by=current_user)
-        query_set_owed_by = Bill.objects.filter(debts__owed_by=current_user)
-
-        query_set = list(chain(query_set_create, query_set_paid_by, query_set_owed_by))
-
-        # username_set = set()
-        # final_result = list()
-        # for i in query_set:
-        #     if i.id not in username_set:
-        #         username_set.add(i.id)
-        #         final_result.append(i)
-
-        final_result = sorted(query_set, key=lambda instance: instance.create_date)
-        return final_result
-
-    def get_queryset(self):
-        return [b for b in self.base_queryset() if b.balance >= 0.01 or b.balance <= -0.01]
-
-    def get_object(self):
-        for b in self.get_queryset():
-            if b.id == int(self.kwargs.get('pk')):
-                return b
-        raise Http404()
-
-
 class BillViewSet(
     viewsets.GenericViewSet,
     mixins.ListModelMixin,
@@ -140,8 +89,39 @@ class BillViewSet(
         for group in groups:
             for bill in group.bills.all():
                 result.append(bill)
+        return result
 
-        print(result)
+    def get_object(self):
+        for val in self.get_queryset():
+            if val.id == int(self.kwargs.get('pk')):
+                return val
+        raise Http404()
+
+    def create(self, request, *args, **kwargs):
+        request.data['creator__write'] = request.user.id
+        return super().create(request, *args, **kwargs)
+
+
+class BillInstantViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+):
+    serializer_class = serializers.BillInstantSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+
+    def get_queryset(self):
+        current_user = self.request.user
+        groups = current_user.bill_groups.all()
+
+        result = []
+        for group in groups:
+            for bill in group.bills.all():
+                result.append(bill)
         return result
 
     def get_object(self):
@@ -169,38 +149,20 @@ class TransactionViewSet(
 
     def get_queryset(self):
         current_user = self.request.user
+        groups = current_user.bill_groups.all()
 
-        current_user = User()
-        memberships = current_user.memberships
-
-        involved_bills_by_creator = Bill.objects.filter(creator=current_user)
-        involved_bills_by_debts = Bill.objects.filter(debts__owed_by=current_user)
-        involved_bills_by_payments = Bill.objects.filter(payments__paid_by=current_user)
-        involved_bills = chain(involved_bills_by_creator, involved_bills_by_debts, involved_bills_by_payments)
-        involved_bills_debts = []
-        for bill in involved_bills:
-            involved_bills_debts += bill.debts.all()
-
-        you_paid = Transaction.objects.filter(owed_by=current_user)
-        paid_to_you = Transaction.objects.filter(bill__payments__paid_by=current_user)
-
-        result = chain(you_paid, paid_to_you, involved_bills_debts)
-        return self.union_sort_queryset(result, lambda instance: instance.bill.create_date)
+        result = []
+        for group in groups:
+            for bill in group.bills.all():
+                for trans in bill.transactions.all():
+                    result.append(trans)
+        return result
 
     def get_object(self):
         for val in self.get_queryset():
             if val.id == int(self.kwargs.get('pk')):
                 return val
         raise Http404()
-
-    def union_sort_queryset(self, queryset, sort_key):
-        pks = set()
-        result = list()
-        for quantity in queryset:
-            if quantity.pk not in pks:
-                pks.add(quantity.pk)
-                result.append(quantity)
-        return sorted(result, key=sort_key)
 
 
 class GroupViewSet(

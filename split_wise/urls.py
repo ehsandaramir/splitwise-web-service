@@ -8,9 +8,9 @@ router = DefaultRouter()
 router.register(r'profiles', views.ProfileViewSet, base_name='profile')
 router.register(r'users', views.UserViewSet, base_name='user')
 router.register(r'groups', views.GroupViewSet, base_name='group')
-router.register(r'self', views.SelfUserViewSet, base_name='self')
 
 router.register(r'bills', views.BillViewSet, base_name='bill')
+router.register(r'bills_instant', views.BillInstantViewSet, base_name='bill-instant')
 router.register(r'transactions', views.TransactionViewSet, base_name='transaction')
 
 urlpatterns = [
