@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'split_wise.apps.SplitWiseConfig',
     'webapp.apps.WebappConfig',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    # 'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'rest_server.urls'
@@ -128,3 +131,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = 'webapp-dashboard'
 LOGOUT_REDIRECT_URL = 'webapp-main'
+
+CORS_ORIGIN_ALLOW_ALL = True

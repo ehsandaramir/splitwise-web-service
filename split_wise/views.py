@@ -1,8 +1,9 @@
 from django.http import Http404
-from rest_framework import mixins, viewsets, permissions
+from rest_framework import mixins, viewsets, permissions, status, generics
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.response import Response
 
 from split_wise import serializers
 from split_wise.models import *
@@ -63,6 +64,31 @@ class UserViewSet(
                 return self.request.user
             else:
                 raise PermissionDenied('could not change user that is not you!')
+
+
+class SelfUserDetail(generics.GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+
+    def get(self, request, *args, **kwargs):
+        instance = self.request.user
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        # partial = kwargs.pop('partial', False)
+        partial = True
+        instance = request.user
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, *args, **kwargs):
+        request.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class BillViewSet(

@@ -40,9 +40,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         if 'username' in validated_data:
             instance.username = validated_data['username']
         if 'first_name' in validated_data:
-            instance.username = validated_data['first_name']
+            instance.first_name = validated_data['first_name']
         if 'last_name' in validated_data:
-            instance.username = validated_data['last_name']
+            instance.last_name = validated_data['last_name']
         if 'email' in validated_data:
             instance.email = validated_data['email']
         if 'password' in validated_data:
@@ -93,19 +93,17 @@ class BillSerializer(serializers.HyperlinkedModelSerializer):
 class BillInstantSerializer(serializers.HyperlinkedModelSerializer):
     creator = UserSerializer(many=False, read_only=True)
     # creator = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
-    creator__write = serializers.PrimaryKeyRelatedField(source='creator', queryset=User.objects.all(), write_only=True)
+    # creator__write = serializers.PrimaryKeyRelatedField(source='creator', queryset=User.objects.all(), write_only=True)
 
     group = serializers.HyperlinkedRelatedField(view_name='group-detail', read_only=True)
     group__write = serializers.PrimaryKeyRelatedField(source='group', queryset=Group.objects.all(), write_only=True)
 
     transactions = TransactionSerializer(many=True)
 
-    # transactions__write = TransactionSerializer(many=True, write_only=True)
-
     class Meta:
         model = Bill
         fields = ('url', 'pk',
-                  'creator', 'creator__write', 'group', 'group__write',
+                  'creator', 'group', 'group__write',
                   'transactions', 'title', 'create_date', 'amount')
         read_only_fields = ('url', 'pk', 'create_date')
 
@@ -125,9 +123,33 @@ class BillInstantSerializer(serializers.HyperlinkedModelSerializer):
                 raise (ValidationError('transaction item is not valid'))
         return bill
 
-    def update(self, instance, validated_data):
-        # TODO: Implement
-        pass
+    def update(self, instance: Bill, validated_data):
+        if 'title' in validated_data:
+            instance.title = validated_data['title']
+        if 'amount' in validated_data:
+            instance.amount = validated_data['amount']
+        instance.save()
+
+        # if 'transactions' in validated_data:
+        #     current = instance.transactions.all()
+        #     for trans in current:
+        #         trans.delete()
+        #
+        #     created = []
+        #
+        #     for item in validated_data['transactions']:
+        #         item['bill__write'] = item['bill'].id
+        #         item['user__write'] = item['user'].id
+        #         trans_serializer = TransactionSerializer(data=item, many=False)
+        #         if trans_serializer.is_valid():
+        #             trans_serializer.save()
+        #             # created.append(trans_serializer.instance)
+        #         else:
+        #             for trans in created:
+        #                 trans.delete()
+        #             raise (ValidationError('transaction item is not valid'))
+
+        return instance
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):

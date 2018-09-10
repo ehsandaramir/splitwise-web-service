@@ -16,6 +16,7 @@ router.register(r'transactions', views.TransactionViewSet, base_name='transactio
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls'), name='api-auth'),
     path('docs/', include_docs_urls(title='Split Wise Documentations'), name='api-docs'),
+    path('self/', views.SelfUserDetail.as_view(), name='self-detail')
 ]
 
 urlpatterns += router.urls
