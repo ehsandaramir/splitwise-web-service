@@ -158,8 +158,10 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     users__write = serializers.PrimaryKeyRelatedField(source='users', queryset=User.objects.all(), write_only=True,
                                                       many=True)
 
+    bills = BillSerializer(many=True, read_only=True)
+
     class Meta:
         model = Group
-        fields = ('title', 'date_created', 'users', 'users__write')
+        fields = ('url', 'pk', 'title', 'date_created', 'users', 'users__write', 'bills')
         read_only_fields = ('date_created',)
         depth = 1

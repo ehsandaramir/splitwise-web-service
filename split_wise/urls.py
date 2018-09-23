@@ -1,4 +1,5 @@
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 
@@ -16,6 +17,8 @@ router.register(r'transactions', views.TransactionViewSet, base_name='transactio
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls'), name='api-auth'),
     path('docs/', include_docs_urls(title='Split Wise Documentations'), name='api-docs'),
+    path('token-auth/', obtain_auth_token),
+    path('signup/', views.api_signup, name='api-signup'),
     path('self/', views.SelfUserDetail.as_view(), name='self-detail')
 ]
 

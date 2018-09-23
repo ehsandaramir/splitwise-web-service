@@ -1,12 +1,22 @@
 from django.http import Http404
 from rest_framework import mixins, viewsets, permissions, status, generics
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 
 from split_wise import serializers
 from split_wise.models import *
+
+
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+def api_signup(request):
+    serializer = serializers.UserSerializer(data=request.data, context={'request': request})
+    serializer.is_valid(True)
+    serializer.save()
+    return Response(serializer.data)
 
 
 class ProfileViewSet(mixins.ListModelMixin,
@@ -18,7 +28,7 @@ class ProfileViewSet(mixins.ListModelMixin,
     queryset = Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication,)
 
 
 class UserViewSet(
@@ -34,9 +44,8 @@ class UserViewSet(
     note1: there is a Profile model that is one-to-one with user model
     """
     serializer_class = serializers.UserSerializer
-
+    # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticatedOrCreateOnly,)
-    # authentication_classes = (SessionAuthentication, BasicAuthentication)
 
     def get_queryset(self):
         if self.request.query_params:
@@ -70,7 +79,7 @@ class SelfUserDetail(generics.GenericAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, *args, **kwargs):
         instance = self.request.user
@@ -105,7 +114,7 @@ class BillViewSet(
     """
     serializer_class = serializers.BillSerializer
     permission_classes = (IsAuthenticated, )
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         current_user = self.request.user
@@ -138,7 +147,7 @@ class BillInstantViewSet(
 ):
     serializer_class = serializers.BillInstantSerializer
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         current_user = self.request.user
@@ -171,7 +180,7 @@ class TransactionViewSet(
 ):
     serializer_class = serializers.TransactionSerializer
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         current_user = self.request.user
@@ -202,4 +211,4 @@ class GroupViewSet(
     queryset = Group.objects.all()
     serializer_class = serializers.GroupSerializer
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication,)

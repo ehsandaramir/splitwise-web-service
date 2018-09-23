@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'split_wise.apps.SplitWiseConfig',
     'webapp.apps.WebappConfig',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
 ]
 
@@ -56,7 +57,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    # 'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'rest_server.urls'
