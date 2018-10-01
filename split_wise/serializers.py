@@ -59,15 +59,16 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class TransactionSerializer(serializers.HyperlinkedModelSerializer):
     # user = UserSerializer(read_only=True)
-    user = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
-    user__write = serializers.PrimaryKeyRelatedField(source='user', queryset=User.objects.all(), write_only=True)
+    # user = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
+    user__read = serializers.PrimaryKeyRelatedField(source='user', read_only=True)
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
 
-    bill = serializers.HyperlinkedRelatedField(view_name='bill-detail', read_only=True)
-    bill__write = serializers.PrimaryKeyRelatedField(source='bill', queryset=Bill.objects.all(), write_only=True)
+    bill__read = serializers.HyperlinkedRelatedField(source='bill', view_name='bill-detail', read_only=True)
+    bill = serializers.PrimaryKeyRelatedField(queryset=Bill.objects.all(), write_only=True)
 
     class Meta:
         model = Transaction
-        fields = ('url', 'pk', 'bill', 'bill__write', 'user', 'user__write', 'amount', 'direction')
+        fields = ('url', 'pk', 'bill', 'bill__read', 'user', 'user__read', 'amount', 'direction')
         read_only_fields = ('pk',)
 
 

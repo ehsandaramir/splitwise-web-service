@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f8fca888-2b14-4333-b1b1-9c560fb99419" name="Default" comment="fix serializer problems">
-      <change afterPath="$PROJECT_DIR$/docs/signup.create.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rest_server/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rest_server/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/split_wise/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/split_wise/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/split_wise/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/split_wise/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/split_wise/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/split_wise/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/split_wise/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/split_wise/serializers.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/httpRequests/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -147,6 +144,26 @@
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
     </session>
+    <session id="310306448">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.20" value="1" />
+          <entry key="project.open.time.26" value="1" />
+          <entry key="project.opened" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="66" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="66" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -165,11 +182,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/split_wise/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="21" column="48" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
+            <state relative-caret-position="278">
+              <caret line="62" column="46" selection-start-line="62" selection-start-column="46" selection-end-line="62" selection-end-column="46" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
-                <marker date="1536563729848" expanded="true" signature="3737:6239" ph="..." />
               </folding>
             </state>
           </provider>
@@ -244,12 +260,12 @@
         <option value="$PROJECT_DIR$/docs/bill.create.json" />
         <option value="$PROJECT_DIR$/docs/transaction.create.json" />
         <option value="$PROJECT_DIR$/docs/bill_instant.create.json" />
-        <option value="$PROJECT_DIR$/split_wise/serializers.py" />
         <option value="$PROJECT_DIR$/split_wise/models.py" />
         <option value="$PROJECT_DIR$/rest_server/settings.py" />
         <option value="$PROJECT_DIR$/split_wise/views.py" />
         <option value="$PROJECT_DIR$/split_wise/urls.py" />
         <option value="$PROJECT_DIR$/docs/signup.create.json" />
+        <option value="$PROJECT_DIR$/split_wise/serializers.py" />
       </list>
     </option>
   </component>
@@ -313,7 +329,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///home/carina/.local/share/applications/jetbrains-pycharm.desktop&#10;views&#9;FILE&#9;file:///home/carina/Projects/SplitWise/rest_server/webapp/views.py&#10;urls&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="database.console.LAST_STATE" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/venv37/bin/python" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -548,8 +564,8 @@
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1024" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48268157" visible="true" weight="0.24546425" />
-      <window_info id="Structure" order="1" sideWeight="0.5173184" side_tool="true" visible="true" weight="0.24546425" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48044693" visible="true" weight="0.25080043" />
+      <window_info id="Structure" order="1" sideWeight="0.51955307" side_tool="true" visible="true" weight="0.25080043" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Event Log" order="0" sideWeight="0.50055003" side_tool="true" weight="0.32849163" />
       <window_info anchor="bottom" id="Database Changes" order="1" weight="0.32988358" />
@@ -571,7 +587,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info anchor="right" id="Database" order="4" visible="true" weight="0.18836713" />
+      <window_info active="true" anchor="right" id="Database" order="4" visible="true" weight="0.18836713" />
       <window_info anchor="right" id="SciView" order="5" weight="0.32924226" />
       <window_info anchor="right" id="R Graphics" order="6" />
       <window_info anchor="right" id="R Packages" order="7" />
@@ -966,11 +982,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/split_wise/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="21" column="48" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
+        <state relative-caret-position="278">
+          <caret line="62" column="46" selection-start-line="62" selection-start-column="46" selection-end-line="62" selection-end-column="46" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
-            <marker date="1536563729848" expanded="true" signature="3737:6239" ph="..." />
           </folding>
         </state>
       </provider>
