@@ -58,8 +58,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TransactionSerializer(serializers.HyperlinkedModelSerializer):
-    # user = UserSerializer(read_only=True)
-    # user = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
     user__read = serializers.PrimaryKeyRelatedField(source='user', read_only=True)
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
 
@@ -74,7 +72,6 @@ class TransactionSerializer(serializers.HyperlinkedModelSerializer):
 
 class BillSerializer(serializers.HyperlinkedModelSerializer):
     creator = UserSerializer(many=False, read_only=True)
-    # creator = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
     creator__write = serializers.PrimaryKeyRelatedField(source='creator', queryset=User.objects.all(), write_only=True)
 
     group = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -88,13 +85,10 @@ class BillSerializer(serializers.HyperlinkedModelSerializer):
                   'creator', 'creator__write', 'group', 'group__write',
                   'transactions', 'title', 'create_date', 'amount')
         read_only_fields = ('url', 'pk', 'create_date')
-        # depth = 1
 
 
 class BillInstantSerializer(serializers.HyperlinkedModelSerializer):
     creator = UserSerializer(many=False, read_only=True)
-    # creator = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
-    # creator__write = serializers.PrimaryKeyRelatedField(source='creator', queryset=User.objects.all(), write_only=True)
 
     group = serializers.HyperlinkedRelatedField(view_name='group-detail', read_only=True)
     group__write = serializers.PrimaryKeyRelatedField(source='group', queryset=Group.objects.all(), write_only=True)
@@ -130,38 +124,17 @@ class BillInstantSerializer(serializers.HyperlinkedModelSerializer):
         if 'amount' in validated_data:
             instance.amount = validated_data['amount']
         instance.save()
-
-        # if 'transactions' in validated_data:
-        #     current = instance.transactions.all()
-        #     for trans in current:
-        #         trans.delete()
-        #
-        #     created = []
-        #
-        #     for item in validated_data['transactions']:
-        #         item['bill__write'] = item['bill'].id
-        #         item['user__write'] = item['user'].id
-        #         trans_serializer = TransactionSerializer(data=item, many=False)
-        #         if trans_serializer.is_valid():
-        #             trans_serializer.save()
-        #             # created.append(trans_serializer.instance)
-        #         else:
-        #             for trans in created:
-        #                 trans.delete()
-        #             raise (ValidationError('transaction item is not valid'))
-
         return instance
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    users = UserSerializer(many=True, read_only=True)
-    # users = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
-    users__write = serializers.PrimaryKeyRelatedField(source='users', queryset=User.objects.all(), write_only=True,
+    users__read = UserSerializer(source='users', many=True, read_only=True)
+    users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True,
                                                       many=True)
     bills = BillSerializer(many=True, read_only=True)
 
     class Meta:
         model = Group
-        fields = ('url', 'pk', 'title', 'date_created', 'users', 'users__write', 'bills')
+        fields = ('url', 'pk', 'title', 'date_created', 'users', 'users__read', 'bills')
         read_only_fields = ('date_created',)
         depth = 1
