@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f8fca888-2b14-4333-b1b1-9c560fb99419" name="Default" comment="fix serializer problems">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/split_wise/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/split_wise/serializers.py" afterDir="false" />
     </list>
@@ -147,10 +146,11 @@
     <session id="310306448">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="3" />
           <entry key="project.open.time.20" value="1" />
           <entry key="project.open.time.26" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -182,8 +182,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/split_wise/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="62" column="46" selection-start-line="62" selection-start-column="46" selection-end-line="62" selection-end-column="46" />
+            <state relative-caret-position="572">
+              <caret line="158" column="43" selection-start-line="158" selection-start-column="43" selection-end-line="158" selection-end-column="43" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -562,10 +562,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1024" extended-state="6" />
+    <frame x="0" y="0" width="1920" height="1026" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48044693" visible="true" weight="0.25080043" />
-      <window_info id="Structure" order="1" sideWeight="0.51955307" side_tool="true" visible="true" weight="0.25080043" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4793757" visible="true" weight="0.21184632" />
+      <window_info id="Structure" order="1" sideWeight="0.5206243" side_tool="true" visible="true" weight="0.21184632" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Event Log" order="0" sideWeight="0.50055003" side_tool="true" weight="0.32849163" />
       <window_info anchor="bottom" id="Database Changes" order="1" weight="0.32988358" />
@@ -580,14 +580,14 @@
       <window_info anchor="bottom" id="Debug" order="10" weight="0.39106146" />
       <window_info anchor="bottom" id="Cvs" order="11" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="12" weight="0.4" />
-      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.49944994" weight="0.24581006" />
+      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.49944994" weight="0.4225195" />
       <window_info anchor="bottom" id="TODO" order="14" weight="0.32969698" />
       <window_info anchor="bottom" id="Concurrent Activities Diagram" order="15" visible="true" weight="0.32960895" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info active="true" anchor="right" id="Database" order="4" visible="true" weight="0.18836713" />
+      <window_info anchor="right" id="Database" order="4" weight="0.18836713" />
       <window_info anchor="right" id="SciView" order="5" weight="0.32924226" />
       <window_info anchor="right" id="R Graphics" order="6" />
       <window_info anchor="right" id="R Packages" order="7" />
@@ -820,20 +820,8 @@
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/5790f1e1-d5b1-4b97-83d7-e06e251eca5b/console.sql">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/split_wise_group">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/split_wise_group_users">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/split_wise_group" />
+    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/split_wise_group_users" />
     <entry file="file://$PROJECT_DIR$/venv37/lib/python3.7/site-packages/django/core/management/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="217">
@@ -876,13 +864,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/split_wise_bill">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/split_wise_bill" />
     <entry file="file://$PROJECT_DIR$/venv37/lib/python3.7/site-packages/rest_framework/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
@@ -890,13 +872,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/split_wise_transaction">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/split_wise_transaction" />
     <entry file="file://$PROJECT_DIR$/docs/bill.create.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
@@ -939,13 +915,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/authtoken_token">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://6e5015ad-3d81-4095-84a9-f9ee3f6e13b0/schema/main/table/authtoken_token" />
     <entry file="file://$PROJECT_DIR$/docs/signup.create.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -982,8 +952,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/split_wise/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="62" column="46" selection-start-line="62" selection-start-column="46" selection-end-line="62" selection-end-column="46" />
+        <state relative-caret-position="572">
+          <caret line="158" column="43" selection-start-line="158" selection-start-column="43" selection-end-line="158" selection-end-column="43" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>

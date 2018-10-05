@@ -77,7 +77,7 @@ class BillSerializer(serializers.HyperlinkedModelSerializer):
     # creator = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
     creator__write = serializers.PrimaryKeyRelatedField(source='creator', queryset=User.objects.all(), write_only=True)
 
-    group = serializers.HyperlinkedRelatedField(view_name='group-detail', read_only=True)
+    group = serializers.PrimaryKeyRelatedField(read_only=True)
     group__write = serializers.PrimaryKeyRelatedField(source='group', queryset=Group.objects.all(), write_only=True)
 
     transactions = TransactionSerializer(many=True, read_only=True)
@@ -158,7 +158,6 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     # users = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
     users__write = serializers.PrimaryKeyRelatedField(source='users', queryset=User.objects.all(), write_only=True,
                                                       many=True)
-
     bills = BillSerializer(many=True, read_only=True)
 
     class Meta:
