@@ -28,6 +28,7 @@ Temporary Items
 __pycache__/
 *.py[cod]
 
+### virtual environments
 venv/
 venv37/
 
@@ -90,3 +91,4 @@ local_settings.py
 .env
 db.sqlite3
 
+.idea/
