@@ -1,5 +1,5 @@
 [run]
-include = contractportal/*
+include = split_wise/*,webapp/*
 
 [report]
 exclude_lines =
