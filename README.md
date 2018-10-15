@@ -1,4 +1,4 @@
-# Splitwise [![Build Status](https://travis-ci.com/ehsandaramir/splitwise-web-service.svg?branch=fb_client_all_crud)](https://travis-ci.com/ehsandaramir/splitwise-web-service)
+# Splitwise [![Build Status](https://travis-ci.com/ehsandaramir/splitwise-web-service.svg?branch=master)](https://travis-ci.com/ehsandaramir/splitwise-web-service)
 
 Django is a high-level Python Web framework that encourages rapid development
 and clean, pragmatic design. Thanks for checking it out.
